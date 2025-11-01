@@ -2,12 +2,23 @@ import React from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 
 const AppNavbar = ({ auth, isAdmin, onLogout, onMenuClick, viewMode }) => {
-  const username = auth.user?.profile?.email || 'Guest';
+  const firstName = auth.user?.profile?.given_name || '';
+  const lastName = auth.user?.profile?.family_name || '';
+  const username = firstName && lastName ? `${firstName} ${lastName}` : 'John Doe';
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand>LinkHub</Navbar.Brand>
+        <Navbar.Brand href="#">
+          <img
+            src="/logo192.png" 
+            alt="LinkHub Logo"
+            width="40"
+            height="35"
+            style={{ marginRight: '10px' }}
+          />
+          LinkHub
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">

@@ -84,6 +84,7 @@ function App() {
         isAdmin={isAdmin}
         onLogout={() => auth.signoutRedirect()}
         onMenuClick={setViewMode}
+        viewMode={viewMode}
       />
 
       <div className="container mt-4">

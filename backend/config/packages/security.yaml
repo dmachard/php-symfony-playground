@@ -1,0 +1,26 @@
+security:
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]
+
+    providers:
+        oidc_user_provider:
+            id: App\Security\OidcUserProvider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        swagger:
+            pattern: ^/api/docs
+            security: false
+
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: oidc_user_provider
+            custom_authenticators:
+                - App\Security\OidcAuthenticator
+
+    access_control:
+        - { path: ^/api, roles: ROLE_USER }

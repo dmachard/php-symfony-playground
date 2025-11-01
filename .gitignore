@@ -1,0 +1,6 @@
+
+docker/*.crt
+docker/*.key
+
+backend/vendor/
+frontend/node_modules/

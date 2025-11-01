@@ -27,6 +27,9 @@ backend_php     9000/tcp
 backend_web     0.0.0.0:80->80/tcp, [::]:80->80/tcp
 database        3306/tcp, 33060/tcp
 
-# Init PHP backend
+# Init PHP backend dependancies
 docker compose exec backend composer install
+# Init database
+docker compose exec backend php bin/console doctrine:schema:update --force
+
 ```

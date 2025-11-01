@@ -48,12 +48,12 @@ services:
     volumes:
       - ./backend:/var/www/html
     environment:
-      - APP_ENV=dev
-      - APP_DEBUG=1
-      - DATABASE_URL="mysql://symfony:symfony@db:3306/symfony?serverVersion=8.0&charset=utf8"
-      - CORS_ALLOW_ORIGIN="https://localhost/app/"
-      - OIDC_DOMAIN="https://auth/realms/playground"
-      - OIDC_AUDIENCE="api_symfony"
+      APP_ENV: dev
+      APP_DEBUG: 1
+      DATABASE_URL: mysql://symfony:symfony@database:3306/symfony?serverVersion=8.0
+      CORS_ALLOW_ORIGIN: https://localhost/app/
+      OIDC_DOMAIN: https://auth/realms/playground
+      OIDC_AUDIENCE: api_symfony
     depends_on:
       - database
     ports:

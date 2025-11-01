@@ -11,6 +11,7 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
@@ -26,14 +27,16 @@ class OidcAuthenticator extends AbstractAuthenticator
     private ?array $cachedKeys = null;
     private LoggerInterface $logger;
     private UserProviderInterface $userProvider;
+    private $env;
 
-    public function __construct(HttpClientInterface $httpClient, string $oidcDomain, string $oidcAudience, LoggerInterface $logger, UserProviderInterface $userProvider)
+    public function __construct(KernelInterface $kernel, HttpClientInterface $httpClient, string $oidcDomain, string $oidcAudience, LoggerInterface $logger, UserProviderInterface $userProvider)
     {
         $this->httpClient = $httpClient;
         $this->oidcDomain = rtrim($oidcDomain, '/');
         $this->oidcAudience = $oidcAudience;
         $this->logger = $logger;
         $this->userProvider = $userProvider;
+        $this->env = $kernel->getEnvironment();
     }
 
     public function supports(Request $request): ?bool
@@ -53,8 +56,15 @@ class OidcAuthenticator extends AbstractAuthenticator
         try {
             // Retrieve the JWKS from the OIDC provider
             if ($this->cachedKeys === null) {
+                $options = [];
+                if ($this->env === 'dev') {
+                    // Disable SSL verification in dev environment
+                    $options['verify_peer'] = false;
+                    $options['verify_host'] = false;
+                }
+
                 $jwksUrl = $this->oidcDomain . '/protocol/openid-connect/certs';
-                $response = $this->httpClient->request('GET', $jwksUrl);
+                $response = $this->httpClient->request('GET', $jwksUrl, $options);
                 $jwks = $response->toArray();
                 $this->cachedKeys = JWK::parseKeySet($jwks);
             }

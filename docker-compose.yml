@@ -51,8 +51,8 @@ services:
       APP_ENV: dev
       APP_DEBUG: 1
       DATABASE_URL: mysql://symfony:symfony@database:3306/symfony?serverVersion=8.0
-      CORS_ALLOW_ORIGIN: https://localhost/app/
-      OIDC_DOMAIN: https://auth/realms/playground
+      CORS_ALLOW_ORIGIN: https://localhost:3000
+      OIDC_DOMAIN: https://auth:8443/realms/playground
       OIDC_AUDIENCE: api_symfony
     depends_on:
       - database
@@ -71,6 +71,23 @@ services:
     networks:
       - app_network
 
+  frontend_node:
+    image: node:24-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm start"
+    ports:
+      - "3000:3000"
+    environment:
+      - HTTPS=true
+      - REACT_APP_API_URL=https://localhost/api/
+      - REACT_APP_AUTH_OIDC_DOMAIN=https://localhost:8443/realms/playground
+      - REACT_APP_AUTH_OIDC_CLIENT_ID=react_app
+      - REACT_APP_AUTH_OIDC_AUDIENCE=api_symfony
+    networks:
+      - app_network
+
   reverseproxy:
     image: nginx:1.29-alpine3.22
     ports:
@@ -85,25 +102,6 @@ services:
     networks:
       - app_network
 
-
-  # frontend:
-  #   image: node:24
-  #   container_name: frontend_react
-  #   user: "${UID:-1000}:${GID:-1000}"
-  #   working_dir: /app
-  #   volumes:
-  #   - ./frontend/src:/app
-  #   ports:
-  #     - "3000:3000"
-  #   command: sh -c "npm install && npm start"
-  #   environment:
-  #     - HTTPS=true
-  #     - REACT_APP_API_URL=https://localhost/api/
-  #     - REACT_APP_AUTH_OIDC_DOMAIN=http://localhost:8081/realms/playground
-  #     - REACT_APP_AUTH_OIDC_CLIENT_ID=react_app
-  #     - REACT_APP_AUTH_OIDC_AUDIENCE=api_symphony
-  #   networks:
-  #     - app_network
 
 volumes:
   db_data:

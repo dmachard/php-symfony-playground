@@ -7,6 +7,10 @@ A Symfony playground
 - API Swagger : https://localhost/api/docs
 - Admin Keycloak : https://localhost:8443/
 
+default users
+- admin/admin for keycloak
+- alice and bob for the main app (user role)
+- god for the main app (admin role)
 
 ```bash
 # Generate cert for HTTPS

@@ -1,5 +1,3 @@
-# php-symfony-playground
-
 # 🧩 PHP Symfony Playground
 
 A full-featured **Symfony playground** with authentication, role management, and frontend integration.
@@ -8,10 +6,16 @@ A full-featured **Symfony playground** with authentication, role management, and
 
 | Service | URL | Description |
 |----------|-----|-------------|
-| **Frontend** | [https://localhost:3000](https://localhost:3000) | React/Next.js frontend (client app) |
+| **Frontend** | [https://localhost:3000](https://localhost:3000) | React frontend (client app) |
 | **Symfony API** | [https://localhost:9443/api](https://localhost:9443/api) | Main backend API |
 | **Swagger Docs** | [https://localhost:9443/api/docs](https://localhost:9443/api/docs) | OpenAPI documentation for the Symfony API |
 | **Keycloak Admin Console** | [https://localhost:8443](https://localhost:8443) | Identity and access management (SSO, roles, users) |
+
+> **Important:**  
+> This playground uses a **self-signed SSL certificate** for all HTTPS services (`localhost:3000`, `localhost:9443`, `localhost:8443`).  
+> Most browsers will show a *security warning* when you first access these URLs.  
+> You’ll need to **manually trust or accept the certificate** in your browser before proceeding.  
+
 
 ## 👥 Default Users
 

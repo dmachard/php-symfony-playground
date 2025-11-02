@@ -6,6 +6,8 @@ import LinkList from './components/LinkList';
 import AppNavbar from './components/Navbar';
 import Home from './components/Home';
 import Login from './components/Login';
+import LoadingScreen from './components/LoadingScreen';
+import AuthErrorScreen from './components/AuthErrorScreen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -58,8 +60,10 @@ function App() {
     loadData();
   }, [auth.isAuthenticated, auth.user?.access_token]);
 
-  if (auth.isLoading) return <p className="text-center mt-5">Loading authentication...</p>;
-  if (auth.error) return <p className="text-danger text-center mt-5">Auth error: {auth.error.message}</p>;
+  if (auth.isLoading) return <LoadingScreen />;
+  if (auth.error) {
+    return <AuthErrorScreen error={auth.error} onRetry={() => auth.signinRedirect()} />;
+  }
   if (!auth.isAuthenticated) {
     return <Login onLogin={() => auth.signinRedirect()} />;
   }

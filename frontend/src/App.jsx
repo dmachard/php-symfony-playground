@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
-import { fetchUsers, fetchLinks, setAuthToken, fetchMe } from './services/api';
+
+import { fetchUsers, fetchLinks, setAuthToken, fetchMe, addLink } from './services/api';
+
 import UserList from './components/UserList';
 import LinkList from './components/LinkList';
 import AppNavbar from './components/Navbar';
@@ -8,6 +10,8 @@ import Home from './components/Home';
 import Login from './components/Login';
 import LoadingScreen from './components/LoadingScreen';
 import AuthErrorScreen from './components/AuthErrorScreen';
+import AddLinkForm from './components/AddLinkForm';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -60,6 +64,7 @@ function App() {
     loadData();
   }, [auth.isAuthenticated, auth.user?.access_token]);
 
+  // Handle authentication states
   if (auth.isLoading) return <LoadingScreen />;
   if (auth.error) {
     return <AuthErrorScreen error={auth.error} onRetry={() => auth.signinRedirect()} />;
@@ -68,6 +73,23 @@ function App() {
     return <Login onLogin={() => auth.signinRedirect()} />;
   }
 
+  // Handle adding a new link
+  const handleAddLink = async (linkData) => {
+    try {
+      const res = await addLink(linkData);
+      const newLink = res.data;
+
+      if (isAdmin) {
+        setAllLinks((prev) => [...prev, newLink]);
+      } else {
+        setMyLinks((prev) => [...prev, newLink]);
+      }
+    } catch (error) {
+      console.error('Error adding link:', error);
+      alert('Failed to add link');
+    }
+  };
+
   const renderContent = () => {
     switch (viewMode) {
       case 'home':
@@ -75,7 +97,14 @@ function App() {
       case 'users':
         return <UserList users={users} onSelectUser={setSelectedUser} selectedUser={selectedUser} />;
       case 'links':
-        return <LinkList links={isAdmin ? allLinks : myLinks} selectedUser={isAdmin ? selectedUser : null} currentUser={currentUser} />;
+        return <LinkList 
+                  links={isAdmin ? allLinks : myLinks}
+                  users={users}
+                  selectedUser={isAdmin ? selectedUser : null}
+                  currentUser={currentUser}
+                  isAdmin={isAdmin}
+                  onLinkAdded={handleAddLink}
+                />;
       default:
         return <Home isAdmin={isAdmin} users={users} allLinks={allLinks} myLinks={myLinks} />;
     }

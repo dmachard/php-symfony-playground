@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\LinkRepository;
 use App\State\LinkProvider;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +21,11 @@ use Doctrine\ORM\Mapping as ORM;
         new GetCollection(
             security: "is_granted('ROLE_USER')",
             provider: LinkProvider::class
+        ),
+        new Post(
+            security: "is_granted('ROLE_USER')",
+            securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getUser() == null or object.getUser().getEmail() == user.getUserIdentifier()",
+            securityPostDenormalizeMessage: "You can only create links for yourself unless you are admin."
         )
     ]
 )]

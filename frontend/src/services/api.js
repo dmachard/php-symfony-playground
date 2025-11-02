@@ -27,4 +27,7 @@ export const fetchLinks = () => api.get(API_VERSION + '/links');
 export const fetchMe = () => api.get(API_VERSION + '/me');
 
 // Add a new link
-export const addLink = (linkData) => api.post('/links', linkData);
+export const addLink = (linkData) =>
+  api.post(API_VERSION +'/links', linkData, {
+    headers: { 'Content-Type': 'application/ld+json' },
+  });

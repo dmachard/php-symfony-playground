@@ -27,6 +27,7 @@ class MeProvider implements ProviderInterface
             $dto->links[] = [
                 'id' => $link->getId(),
                 'title' => $link->getTitle(),
+                'url' => $link->getUrl(),
                 'description' => $link->getDescription(),
             ];
         }

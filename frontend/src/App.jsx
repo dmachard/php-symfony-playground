@@ -56,7 +56,7 @@ function App() {
     };
 
     loadData();
-  }, [auth.isAuthenticated]);
+  }, [auth.isAuthenticated, auth.user?.access_token]);
 
   if (auth.isLoading) return <p className="text-center mt-5">Loading authentication...</p>;
   if (auth.error) return <p className="text-danger text-center mt-5">Auth error: {auth.error.message}</p>;

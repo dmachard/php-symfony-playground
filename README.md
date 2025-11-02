@@ -51,3 +51,19 @@ curl -k https://localhost:8443/realms/playground/.well-known/openid-configuratio
 docker compose exec backend composer install
 docker compose exec backend php bin/console doctrine:schema:update --force
 ```
+
+# Install more packages
+
+Install package for front
+
+```bash
+docker compose exec -it frontend_node sh
+npm install react-scripts@latest
+```
+
+Install package for backend
+
+```bash
+docker compose exec backend_php sh
+composer require nelmio/cors-bundle
+```

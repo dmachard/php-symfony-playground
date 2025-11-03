@@ -31,3 +31,7 @@ export const addLink = (linkData) =>
   api.post(API_VERSION +'/links', linkData, {
     headers: { 'Content-Type': 'application/ld+json' },
   });
+
+// Delete a user (admin only)
+export const deleteUser = (userId) =>
+  api.delete(`/${API_VERSION}/users/${userId}`);

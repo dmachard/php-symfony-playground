@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 
-import { fetchUsers, fetchLinks, setAuthToken, fetchMe, addLink } from './services/api';
+import { fetchUsers, fetchLinks, setAuthToken, fetchMe, addLink, deleteUser } from './services/api';
 
 import UserList from './components/UserList';
 import LinkList from './components/LinkList';
@@ -89,12 +89,27 @@ function App() {
     }
   };
 
+  // handle delete user
+  const handleDeleteUser = async (userId) => {
+    try {
+      await deleteUser(userId);
+      setUsers(prev => prev.filter(u => u.id !== userId));
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete user: " + (err.response?.data?.message || err.message));
+    }
+  };
+
   const renderContent = () => {
     switch (viewMode) {
       case 'home':
         return <Home isAdmin={isAdmin} users={users} allLinks={allLinks} myLinks={myLinks} />;
       case 'users':
-        return <UserList users={users} onSelectUser={setSelectedUser} selectedUser={selectedUser} />;
+        return <UserList
+                  users={users}
+                  isAdmin={isAdmin}
+                  onDeleteUser={handleDeleteUser}
+                />;
       case 'links':
         return <LinkList 
                   links={isAdmin ? allLinks : myLinks}

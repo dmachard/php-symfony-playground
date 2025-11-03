@@ -12,6 +12,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use App\State\UserDeleteProcessor;
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     routePrefix: '/v1',

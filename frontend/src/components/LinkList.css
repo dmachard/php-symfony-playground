@@ -60,34 +60,36 @@
   color: #777;
   margin-bottom: 0.5rem;
 }
+.clickable-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+}
 
-.link-url-text {
-  font-size: 0.8rem;
+.add-link-card {
+  cursor: pointer;
+}
+
+.add-link-card:hover {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.add-link-plus {
+  font-size: 2.5rem;
   color: #2196f3;
-  word-break: break-all;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
-.link-url-button {
-  display: inline-block;
-  align-self: flex-end;
-  font-size: 1.5rem;
-  color: #fff;
-  background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.3s, transform 0.2s;
+.add-link-text {
+  font-weight: 600;
+  color: #2196f3;
+  margin: 0;
 }
 
-.link-url-button:hover {
-  background: linear-gradient(135deg, #1976d2 0%, #1a9cd9 100%);
-  transform: translateY(-2px);
-}
 
 
 .add-link-card {
-  background: #f9f9f9;       /* léger gris pour différencier */
+  background: #f9f9f9;
   border: 2px dashed #ccc;
   cursor: pointer;
   display: flex;

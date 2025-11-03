@@ -59,7 +59,11 @@ const LinkList = ({ links, users, selectedUser, currentUser, isAdmin, onLinkAdde
         {/* Existing Links */}
         {filteredLinks && filteredLinks.map(link => (
           <div key={link.id} className="col-md-4 mb-4">
-            <div className="link-card d-flex flex-column justify-content-between">
+            <div 
+              className="link-card d-flex flex-column justify-content-between clickable-card"
+              onClick={() => link.url && window.open(link.url, '_blank', 'noopener,noreferrer')}
+              style={{ cursor: link.url ? 'pointer' : 'default' }}
+            >
               <div>
                 <h5 className="card-title">{link.title}</h5>
                 {isAdmin && link.user && (
@@ -72,16 +76,6 @@ const LinkList = ({ links, users, selectedUser, currentUser, isAdmin, onLinkAdde
                   <p className="link-url-text">{link.url}</p>
                 )}
               </div>
-              {link.url && (
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-url-button"
-                >
-                  ➔
-                </a>
-              )}
             </div>
           </div>
         ))}

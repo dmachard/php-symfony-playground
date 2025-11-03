@@ -5,16 +5,45 @@ import './LinkList.css';
 
 const LinkList = ({ links, users, selectedUser, currentUser, isAdmin, onLinkAdded }) => {
   const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const filteredLinks = selectedUser
+  // filter links based on selected user
+  const visibleLinks = selectedUser
     ? links.filter(link => link.user && link.user.id === selectedUser.id)
     : links;
 
+  // filter links based on search term
+  const filteredLinks = visibleLinks.filter(link => {
+    const linkText = `${link.title || ''} ${link.description || ''} ${link.url || ''}`.toLowerCase();
+
+    let userText = '';
+    if (isAdmin && link.user) {
+      const user = users.find(u => `/api/v1/users/${u.id}` === link.user);
+      if (user) {
+        userText = `${user.email || ''} ${user.firstname || ''} ${user.lastname || ''}`.toLowerCase();
+      }
+    }
+
+    const search = searchTerm.toLowerCase();
+    return linkText.includes(search) || userText.includes(search);
+  });
+
   return (
     <div className="link-list-container">
+            {/* Search bar */}
+      <div className="search-bar mb-4 d-flex justify-content-center">
+        <input
+          type="text"
+          className="form-control search-input"
+          placeholder="Search links..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <div className="row mt-3">
         {/* Card Add Link */}
         <div className="col-md-4 mb-4">

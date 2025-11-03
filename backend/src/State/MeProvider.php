@@ -23,15 +23,6 @@ class MeProvider implements ProviderInterface
         $dto->email = $user->getEmail();
         $dto->roles = $user->getRoles();
 
-        foreach ($user->getLinks() as $link) {
-            $dto->links[] = [
-                'id' => $link->getId(),
-                'title' => $link->getTitle(),
-                'url' => $link->getUrl(),
-                'description' => $link->getDescription(),
-            ];
-        }
-
         return $dto;
     }
 }

@@ -45,13 +45,13 @@ function App() {
         setIsAdmin(admin);
 
         // Fetch links and users based on role
+        const linksRes = await fetchLinks();
         if (admin) {
-          const linksRes = await fetchLinks();
           setAllLinks(linksRes.data.member || []);
           const usersRes = await fetchUsers();
           setUsers(usersRes.data.member || []);
         } else {
-          setMyLinks(meRes.data.links || []);
+          setMyLinks(linksRes.data.member || []);
         }
 
       } catch (e) {

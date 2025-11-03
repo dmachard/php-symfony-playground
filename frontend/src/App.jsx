@@ -10,7 +10,6 @@ import Home from './components/Home';
 import Login from './components/Login';
 import LoadingScreen from './components/LoadingScreen';
 import AuthErrorScreen from './components/AuthErrorScreen';
-import AddLinkForm from './components/AddLinkForm';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';

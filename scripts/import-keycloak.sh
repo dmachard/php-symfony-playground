@@ -5,10 +5,12 @@ REALM_FILE="./realm-export.json"
 REALM="playground"
 CLIENT_NAME="api_symfony"
 
-declare -A USERS
-USERS["alice"]="ROLE_USER:Alice:Dupont"
-USERS["bob"]="ROLE_USER:Bob:Martin"
-USERS["god"]="ROLE_ADMIN:God:Almighty"
+# Users data: username:role:firstname:lastname
+USERS=(
+  "alice:ROLE_USER:Alice:Dupont"
+  "bob:ROLE_USER:Bob:Martin"
+  "god:ROLE_ADMIN:God:Almighty"
+)
 
 # Admin authentication
 TOKEN_RESPONSE=$(curl -k -s -X POST "${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token" \
@@ -49,8 +51,8 @@ fi
 echo "Found client '${CLIENT_NAME}' with id: ${CLIENT_UUID}"
 
 # Create users and assign client roles
-for USERNAME in "${!USERS[@]}"; do
-  IFS=':' read -r CLIENT_ROLE FIRSTNAME LASTNAME <<< "${USERS[$USERNAME]}"
+for USER_DATA in "${USERS[@]}"; do
+  IFS=':' read -r USERNAME CLIENT_ROLE FIRSTNAME LASTNAME <<< "$USER_DATA"
   echo "Creating user '$USERNAME' ($FIRSTNAME $LASTNAME) with role '$CLIENT_ROLE'..."
 
   curl -k -s -X POST "${KEYCLOAK_URL}/admin/realms/${REALM}/users" \

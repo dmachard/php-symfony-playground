@@ -37,19 +37,21 @@ Clone the repository and execute the following commands
 
 ```bash
 # Generate cert for HTTPS
+cd scripts/
 ./scripts/generate-certs.sh
 
-# Start the environment
-docker-compose up --build
+# Start the environment and wait some seconds
+cd ../
+docker-compose up -d --build
 
-# Init Keycloak
+# Init Keycloak and test
+cd scripts/
 ./scripts/import-keycloak.sh
-# Tester Keycloak via Nginx
 curl -k https://localhost:8443/realms/playground/.well-known/openid-configuration
 
 # Init PHP backend dependancies and database model
-docker compose exec backend composer install
-docker compose exec backend php bin/console doctrine:schema:update --force
+docker compose exec backend_php composer install
+docker compose exec backend_php php bin/console doctrine:schema:update --force
 ```
 
 # Install more packages

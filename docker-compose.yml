@@ -4,7 +4,7 @@ networks:
 
 services:
   database:
-    image: mysql:8.0
+    image: mariadb:12.0.2
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -50,7 +50,7 @@ services:
     environment:
       APP_ENV: dev
       APP_DEBUG: 1
-      DATABASE_URL: mysql://symfony:symfony@database:3306/symfony?serverVersion=8.0
+      DATABASE_URL: mysql://symfony:symfony@database:3306/symfony?serverVersion=12.0.2-MariaDB
       CORS_ALLOW_ORIGIN: https://localhost:3000
       OIDC_DOMAIN: https://auth:8443/realms/playground
       OIDC_AUDIENCE: api_symfony

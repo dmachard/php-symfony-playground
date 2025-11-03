@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 
-import { fetchUsers, fetchLinks, setAuthToken, fetchMe, addLink, deleteUser, deleteLink } from './services/api';
+import { fetchUsers, fetchLinks, setAuthToken, fetchMe, addLink, deleteUser, deleteLink, updateLink } from './services/api';
 
 import UserList from './components/UserList';
 import LinkList from './components/LinkList';
@@ -102,15 +102,37 @@ function App() {
   // Handle delete link
   const handleDeleteLink = async (linkId) => {
     try {
-      await deleteLink(linkId);
+        await deleteLink(linkId);
+        if (isAdmin) {
+          setAllLinks(prev => prev.filter(l => l.id !== linkId));
+        } else {
+          setMyLinks(prev => prev.filter(l => l.id !== linkId));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Failed to delete link: " + (err.response?.data?.message || err.message));
+      }
+    };
+
+  // handle update link
+  const handleUpdateLink = async (linkData) => {
+    try {
+      const res = await updateLink(linkData.id, {
+        title: linkData.title,
+        description: linkData.description,
+        url: linkData.url,
+        user: linkData.user,
+      });
+      const updatedLink = res.data;
+
       if (isAdmin) {
-        setAllLinks(prev => prev.filter(l => l.id !== linkId));
+        setAllLinks(prev => prev.map(l => l.id === updatedLink.id ? updatedLink : l));
       } else {
-        setMyLinks(prev => prev.filter(l => l.id !== linkId));
+        setMyLinks(prev => prev.map(l => l.id === updatedLink.id ? updatedLink : l));
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to delete link: " + (err.response?.data?.message || err.message));
+      alert("Failed to update link: " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -130,7 +152,8 @@ function App() {
                   users={users}
                   currentUser={currentUser}
                   isAdmin={isAdmin}
-                  onLinkAdded={handleAddLink}
+                  onAddLink={handleAddLink}
+                  onUpdateLink={handleUpdateLink}
                   onDeleteLink={handleDeleteLink} 
                 />;
       default:

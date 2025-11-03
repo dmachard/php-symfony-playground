@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { Trash } from 'lucide-react';
+import { Trash, Edit3 } from 'lucide-react';
 
 import AddLinkForm from './AddLinkForm';
 import './LinkList.css';
 
-const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded, onDeleteLink }) => {
+const LinkList = ({ links, users, currentUser, isAdmin, onAddLink, onDeleteLink, onUpdateLink }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [linkToDelete, setLinkToDelete] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+  const [editingLink, setEditingLink] = useState(null);
+  
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
   const handleDeleteClick = (link) => {
     setLinkToDelete(link);
     setShowDeleteModal(true);
+  };
+
+  const handleEditClick = (link) => {
+    setEditingLink(link);
+    setShowModal(true);
   };
 
   const confirmDelete = () => {
@@ -89,23 +95,33 @@ const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded, onDeleteLin
                 )}
               </div>
 
-              {/* Delete button */}
-              <button
-                className="delete-btn"
-                title="Delete link"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteClick(link);
-                }}
-              >
-                <Trash size={20} />
-              </button>
+              <div className="d-flex justify-content-end gap-2 mt-2">
+                {/* Edit button */}
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  onClick={(e) => { e.stopPropagation(); handleEditClick(link); }}
+                  title="Edit link"
+                >
+                  <Edit3 size={16} />
+                </Button>
+
+                {/* Delete button */}
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={(e) => { e.stopPropagation(); handleDeleteClick(link); }}
+                  title="Delete link"
+                >
+                  <Trash size={16} />
+                </Button>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Modal Add Link */}
+      {/* Modal Add/Edit Link */}
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Add New Link</Modal.Title>
@@ -115,8 +131,13 @@ const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded, onDeleteLin
             isAdmin={isAdmin}
             users={users}
             currentUser={currentUser}
-            onAddLink={(newLink) => {
-              onLinkAdded(newLink);
+            existingLink={editingLink}
+            onAddLink={(link) => {
+              if (editingLink) {
+                onUpdateLink(link);
+              } else {
+                onAddLink(link);
+              }
               handleCloseModal();
             }}
           />

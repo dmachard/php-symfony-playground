@@ -39,3 +39,9 @@ export const deleteUser = (userId) =>
 // Delete a link (admin or owner)
 export const deleteLink = (linkId) =>
   api.delete(`/${API_VERSION}/links/${linkId}`);
+
+// Update a link (admin or owner)
+export const updateLink = (linkId, data) =>
+  api.put(`${API_VERSION}/links/${linkId}`, data, {
+    headers: { 'Content-Type': 'application/ld+json' },
+  });

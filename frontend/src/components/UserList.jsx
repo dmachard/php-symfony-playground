@@ -80,16 +80,17 @@ const UserList = ({ users, isAdmin, onDeleteUser }) => {
                   </div>
                 </div>
 
-              {/* Delete icon (only for admin) */}
-              {isAdmin && (
-                <button
-                  className="delete-btn"
+              {/* Delete icon*/}
+              <div className="d-flex justify-content-end gap-2 mt-2">
+                <Button
+                  variant="outline-danger"
+                  size="sm"
                   title="Delete user"
                   onClick={() => openDeleteModal(user)}
                 >
-                  <Trash size={20} />
-                </button>
-              )}
+                  <Trash size={16} />
+                </Button>
+              </div>
 
             </div>
             </div>

@@ -18,7 +18,8 @@
 
 .home-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
 }
 
 .home-card h4 {

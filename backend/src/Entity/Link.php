@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Put;
 use App\Repository\LinkRepository;
 use App\State\LinkProvider;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,7 +27,11 @@ use Doctrine\ORM\Mapping as ORM;
         new Delete(
             security: "is_granted('ROLE_ADMIN') or object.getUser().getEmail() == user.getUserIdentifier()",
             securityMessage: "You can only delete your own links unless you are an admin."
-        )
+        ),
+        new Put(
+            security: "is_granted('ROLE_ADMIN') or object.getUser().getEmail() == user.getUserIdentifier()",
+            securityPostDenormalizeMessage: "You can only update your own links unless you are admin."
+        ),
     ]
 )]
 

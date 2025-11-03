@@ -1,25 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const AddLinkForm = ({ isAdmin, users = [], currentUser, onAddLink }) => {
+const AddLinkForm = ({ isAdmin, users = [], currentUser, existingLink, onAddLink }) => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [description, setDescription] = useState('');
   const [selectedUser, setSelectedUser] = useState(currentUser?.id || '');
+
+  // prefill form if editing an existing link
+  useEffect(() => {
+    if (existingLink) {
+      setTitle(existingLink.title || '');
+      setUrl(existingLink.url || '');
+      setDescription(existingLink.description || '');
+      setSelectedUser(existingLink.user ? existingLink.user.split('/').pop() : currentUser?.id);
+    }
+  }, [existingLink, currentUser]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title || !url) return alert('Title and URL are required');
 
     onAddLink({
+      id: existingLink?.id, // add id if editing
       title,
       url,
       description,
       user: `/api/v1/users/${selectedUser}`,
     });
 
-    setTitle('');
-    setUrl('');
-    setDescription('');
+    // Reset form
+    if (!existingLink) {
+      setTitle('');
+      setUrl('');
+      setDescription('');
+    }
   };
 
   return (
@@ -74,7 +89,7 @@ const AddLinkForm = ({ isAdmin, users = [], currentUser, onAddLink }) => {
       )}
 
       <button type="submit" className="btn btn-primary">
-        Add Link
+        {existingLink ? 'Update Link' : 'Add Link'}
       </button>
     </form>
   );

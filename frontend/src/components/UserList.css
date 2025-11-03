@@ -12,8 +12,9 @@
 }
 
 .user-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 20px rgba(0,0,0,0.12), 0 6px 10px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
 }
 
 .user-name {
@@ -41,20 +42,4 @@
   text-align: center;
   color: #7f8c8d;
   font-style: italic;
-}
-
-/* Delete button (icon) */
-.delete-btn {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  color: #7c6b6d;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.delete-btn:hover {
-  color: #a71d2a;
 }

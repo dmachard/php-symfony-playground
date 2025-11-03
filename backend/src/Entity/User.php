@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
 use App\State\UserProvider;
@@ -18,6 +19,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
         new GetCollection(
             security: "is_granted('ROLE_USER')",
             provider: UserProvider::class
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')",
+            securityMessage: "Only admins can delete users.",
+            processor: UserDeleteProcessor::class
         )
     ]
 )]

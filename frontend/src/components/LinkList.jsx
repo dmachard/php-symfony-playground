@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
+import { Trash } from 'lucide-react';
+
 import AddLinkForm from './AddLinkForm';
 import './LinkList.css';
 
-const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded }) => {
+const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded, onDeleteLink }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [linkToDelete, setLinkToDelete] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+
+  const handleDeleteClick = (link) => {
+    setLinkToDelete(link);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    if (linkToDelete) {
+      onDeleteLink(linkToDelete.id);
+      setShowDeleteModal(false);
+      setLinkToDelete(null);
+    }
+  };
 
   // filter links based on search term
   const filteredLinks = links.filter(link => {
@@ -28,7 +45,7 @@ const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded }) => {
 
   return (
     <div className="link-list-container">
-            {/* Search bar */}
+      {/* Search bar */}
       <div className="search-bar mb-4 d-flex justify-content-center">
         <input
           type="text"
@@ -71,6 +88,18 @@ const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded }) => {
                   <p className="link-url-text">{link.url}</p>
                 )}
               </div>
+
+              {/* Delete button */}
+              <button
+                className="delete-btn"
+                title="Delete link"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteClick(link);
+                }}
+              >
+                <Trash size={20} />
+              </button>
             </div>
           </div>
         ))}
@@ -92,6 +121,24 @@ const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded }) => {
             }}
           />
         </Modal.Body>
+      </Modal>
+
+      {/* Modal Delete Link */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the link "{linkToDelete?.title}"?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );

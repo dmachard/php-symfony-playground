@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 
-import { fetchUsers, fetchLinks, setAuthToken, fetchMe, addLink, deleteUser } from './services/api';
+import { fetchUsers, fetchLinks, setAuthToken, fetchMe, addLink, deleteUser, deleteLink } from './services/api';
 
 import UserList from './components/UserList';
 import LinkList from './components/LinkList';
@@ -99,6 +99,21 @@ function App() {
     }
   };
 
+  // Handle delete link
+  const handleDeleteLink = async (linkId) => {
+    try {
+      await deleteLink(linkId);
+      if (isAdmin) {
+        setAllLinks(prev => prev.filter(l => l.id !== linkId));
+      } else {
+        setMyLinks(prev => prev.filter(l => l.id !== linkId));
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete link: " + (err.response?.data?.message || err.message));
+    }
+  };
+
   const renderContent = () => {
     switch (viewMode) {
       case 'home':
@@ -116,6 +131,7 @@ function App() {
                   currentUser={currentUser}
                   isAdmin={isAdmin}
                   onLinkAdded={handleAddLink}
+                  onDeleteLink={handleDeleteLink} 
                 />;
       default:
         return <Home isAdmin={isAdmin} users={users} allLinks={allLinks} myLinks={myLinks} />;

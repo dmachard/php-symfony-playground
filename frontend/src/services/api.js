@@ -35,3 +35,7 @@ export const addLink = (linkData) =>
 // Delete a user (admin only)
 export const deleteUser = (userId) =>
   api.delete(`/${API_VERSION}/users/${userId}`);
+
+// Delete a link (admin or owner)
+export const deleteLink = (linkId) =>
+  api.delete(`/${API_VERSION}/links/${linkId}`);

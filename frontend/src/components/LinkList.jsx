@@ -3,20 +3,15 @@ import { Modal } from 'react-bootstrap';
 import AddLinkForm from './AddLinkForm';
 import './LinkList.css';
 
-const LinkList = ({ links, users, selectedUser, currentUser, isAdmin, onLinkAdded }) => {
+const LinkList = ({ links, users, currentUser, isAdmin, onLinkAdded }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  // filter links based on selected user
-  const visibleLinks = selectedUser
-    ? links.filter(link => link.user && link.user.id === selectedUser.id)
-    : links;
-
   // filter links based on search term
-  const filteredLinks = visibleLinks.filter(link => {
+  const filteredLinks = links.filter(link => {
     const linkText = `${link.title || ''} ${link.description || ''} ${link.url || ''}`.toLowerCase();
 
     let userText = '';

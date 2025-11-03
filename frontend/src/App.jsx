@@ -21,7 +21,6 @@ function App() {
   const [allLinks, setAllLinks] = useState([]);
   const [myLinks, setMyLinks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedUser, setSelectedUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [viewMode, setViewMode] = useState('home');
@@ -114,7 +113,6 @@ function App() {
         return <LinkList 
                   links={isAdmin ? allLinks : myLinks}
                   users={users}
-                  selectedUser={isAdmin ? selectedUser : null}
                   currentUser={currentUser}
                   isAdmin={isAdmin}
                   onLinkAdded={handleAddLink}
